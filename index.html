@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>AETHERIC | ADMIN INTELLIGENCE</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0b12;
+      color: #f1f5f9;
+      transition: background 0.25s ease, color 0.2s ease;
+      line-height: 1.4;
+    }
+
+    /* ===== DARK THEME (default) ===== */
+    body:not(.light-theme) .admin-sidebar {
+      background: #0b0b12;
+      border-right: 2px solid #e11d3f;
+    }
+    body:not(.light-theme) .analytics-card,
+    body:not(.light-theme) .user-growth-widget,
+    body:not(.light-theme) .live-clock-widget,
+    body:not(.light-theme) .chart-card,
+    body:not(.light-theme) .orders-section {
+      background: #111118;
+      border: 2px solid rgba(225, 29, 63, 0.45);
+    }
+    body:not(.light-theme) .orders-table th {
+      background: #1a1a24;
+      border-bottom: 2px solid #e11d3f;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    body:not(.light-theme) .orders-table td {
+      border-bottom: 1.6px solid rgba(225, 29, 63, 0.3);
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+    body:not(.light-theme) .status-filter {
+      background: #1a1a24;
+      border: 1.8px solid #e11d3f;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    body:not(.light-theme) .view-order-btn {
+      background: rgba(225, 29, 63, 0.15);
+      border: 1.8px solid #e11d3f;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    body:not(.light-theme) .view-order-btn:hover {
+      background: #e11d3f;
+      color: white;
+    }
+    body:not(.light-theme) .status-filter.active,
+    body:not(.light-theme) .status-filter:hover {
+      background: #e11d3f;
+      border-color: #e11d3f;
+      color: white;
+    }
+
+    /* ===== LIGHT THEME ===== */
+    body.light-theme {
+      background: #f0f2f8;
+      color: #0f172a;
+    }
+    body.light-theme .admin-sidebar {
+      background: #ffffff;
+      border-right: 2px solid #e11d3f;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.04);
+    }
+    body.light-theme .sidebar-logo h2 {
+      background: linear-gradient(135deg, #e11d3f, #b91c2f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    body.light-theme .sidebar-logo p {
+      color: #475569;
+    }
+    body.light-theme .menu-item {
+      color: #1e293b;
+      border: 1.8px solid transparent;
+    }
+    body.light-theme .menu-item:hover {
+      background: rgba(225, 29, 63, 0.08);
+      color: #e11d3f;
+      border-color: #e11d3f;
+    }
+    body.light-theme .menu-item.active {
+      background: rgba(225, 29, 63, 0.08);
+      color: #e11d3f;
+      border-left: 3px solid #e11d3f;
+      border-color: #e11d3f;
+      font-weight: 700;
+    }
+    body.light-theme .analytics-card,
+    body.light-theme .user-growth-widget,
+    body.light-theme .live-clock-widget,
+    body.light-theme .chart-card,
+    body.light-theme .orders-section {
+      background: #ffffff;
+      border: 2px solid rgba(225, 29, 63, 0.4);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    }
+    body.light-theme .card-title {
+      color: #475569;
+      font-weight: 700;
+    }
+    body.light-theme .card-value {
+      color: #0f172a;
+      font-weight: 800;
+    }
+    body.light-theme .card-change.positive {
+      color: #0d9488;
+    }
+    body.light-theme .card-change.negative {
+      color: #dc2626;
+    }
+    body.light-theme .widget-header h4,
+    body.light-theme .chart-card h3 {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    body.light-theme .greeting-text,
+    body.light-theme .current-date {
+      color: #334155;
+    }
+    body.light-theme .live-clock {
+      background: linear-gradient(135deg, #1e293b, #e11d3f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+    }
+    body.light-theme .orders-table th {
+      background: #f1f5f9;
+      border-bottom: 2px solid #e11d3f;
+      color: #0f172a;
+      font-weight: 800;
+    }
+    body.light-theme .orders-table td {
+      border-bottom: 1.6px solid #cbd5e1;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    body.light-theme .orders-table tr:hover {
+      background: #f8fafc;
+    }
+    body.light-theme .status-filter {
+      background: #ffffff;
+      border: 1.8px solid #cbd5e1;
+      color: #1e293b;
+      font-weight: 700;
+    }
+    body.light-theme .status-filter.active,
+    body.light-theme .status-filter:hover {
+      background: #e11d3f;
+      border-color: #e11d3f;
+      color: white;
+    }
+    body.light-theme .view-order-btn {
+      background: rgba(225,29,63,0.08);
+      border: 1.8px solid #e11d3f;
+      color: #e11d3f;
+      font-weight: 700;
+    }
+    body.light-theme .view-order-btn:hover {
+      background: #e11d3f;
+      color: white;
+    }
+    body.light-theme .status-badge.status-paid,
+    body.light-theme .status-badge.status-delivered {
+      background: rgba(16,185,129,0.12);
+      color: #0d9488;
+      border: 1px solid #0d9488;
+      font-weight: 700;
+    }
+    body.light-theme .status-badge.status-pending {
+      background: rgba(245,158,11,0.15);
+      color: #b45309;
+      border: 1px solid #d97706;
+      font-weight: 700;
+    }
+    body.light-theme .profile-btn {
+      background: #f1f5f9;
+      border: 1.8px solid #cbd5e1;
+    }
+    body.light-theme .profile-name {
+      color: #0f172a;
+    }
+    body.light-theme .profile-role {
+      color: #475569;
+    }
+    body.light-theme .logout-sidebar-btn {
+      color: #1e293b;
+      border-top: 2px solid #e2e8f0;
+    }
+    body.light-theme .logout-sidebar-btn:hover {
+      background: rgba(225,29,63,0.08);
+      color: #e11d3f;
+    }
+
+    /* LAYOUT */
+    .admin-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      width: 280px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 110;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+    }
+    .sidebar-logo {
+      padding: 28px 22px 20px;
+      border-bottom: 2px solid rgba(225, 29, 63, 0.35);
+      margin-bottom: 24px;
+    }
+    .sidebar-logo h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .sidebar-logo p {
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .sidebar-menu {
+      padding: 0 14px;
+      flex: 1;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      border: 1.8px solid transparent;
+      transition: all 0.25s;
+    }
+    .menu-item i {
+      width: 22px;
+      font-size: 1.2rem;
+      color: inherit;
+    }
+    .menu-item:hover {
+      background: rgba(225, 29, 63, 0.12);
+      border-color: #e11d3f;
+      transform: translateX(4px);
+      color: #e11d3f;
+    }
+    .menu-item.active {
+      background: rgba(225, 29, 63, 0.15);
+      border-left: 3px solid #e11d3f;
+      border-color: #e11d3f;
+      color: #e11d3f;
+      font-weight: 700;
+    }
+
+    .logout-sidebar-btn {
+      margin: 20px 14px 10px;
+      padding: 14px 18px;
+      border-top: 2px solid rgba(225, 29, 63, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 14px;
+      transition: all 0.2s;
+      background: transparent;
+      border-bottom: none;
+      border-left: none;
+      border-right: none;
+      color: inherit;
+    }
+    .logout-sidebar-btn i {
+      font-size: 1.2rem;
+    }
+    .logout-sidebar-btn:hover {
+      background: rgba(225, 29, 63, 0.15);
+      color: #e11d3f;
+      border-top-color: #e11d3f;
+    }
+
+    .sidebar-footer-toggle {
+      margin: 0 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 14px;
+      transition: 0.2s;
+      border: 1.8px solid transparent;
+    }
+    .sidebar-footer-toggle:hover {
+      background: rgba(225,29,63,0.1);
+      border-color: #e11d3f;
+    }
+
+    .admin-main {
+      flex: 1;
+      margin-left: 280px;
+      padding: 28px 36px;
+      min-height: 100vh;
+      transition: margin-left 0.3s;
+    }
+    
+    /* Desktop Top Bar */
+    .admin-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 2px solid #e11d3f;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-title h1 {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #e11d3f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    body.light-theme .page-title h1 {
+      background: linear-gradient(135deg, #b91c2f, #e11d3f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .page-title p {
+      font-size: 13px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(225,29,63,0.1);
+      border: 1.8px solid rgba(225,29,63,0.5);
+      border-radius: 60px;
+      padding: 6px 22px;
+      cursor: pointer;
+    }
+    .profile-info {
+      text-align: right;
+    }
+    .profile-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .profile-role {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    .profile-avatar {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #e11d3f, #ff4d6d);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+    }
+
+    /* Mobile Top Bar */
+    .mobile-top-bar {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #0b0b12;
+      border-bottom: 2px solid #e11d3f;
+      z-index: 105;
+      padding: 0 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    body.light-theme .mobile-top-bar {
+      background: #ffffff;
+    }
+    .mobile-logo {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e11d3f, #ff4d6d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .mobile-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .mobile-hamburger, .mobile-profile {
+      background: rgba(225, 29, 63, 0.15);
+      border: 1.8px solid #e11d3f;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #e11d3f;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+    .mobile-hamburger:hover, .mobile-profile:hover {
+      background: #e11d3f;
+      color: white;
+    }
+    .profile-popup {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: #1a1a24;
+      border: 2px solid #e11d3f;
+      border-radius: 16px;
+      padding: 12px;
+      min-width: 200px;
+      z-index: 120;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    body.light-theme .profile-popup {
+      background: #ffffff;
+    }
+    .profile-popup.show {
+      display: block;
+    }
+    .profile-popup-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .profile-popup-item:hover {
+      background: rgba(225, 29, 63, 0.15);
+      color: #e11d3f;
+    }
+    .profile-popup-divider {
+      height: 1px;
+      background: rgba(225, 29, 63, 0.3);
+      margin: 8px 0;
+    }
+
+    /* Analytics Cards */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+    .analytics-card {
+      border-radius: 24px;
+      padding: 22px;
+      transition: 0.2s;
+      position: relative;
+    }
+    .analytics-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #e11d3f, #ff8a8a);
+      border-radius: 24px 24px 0 0;
+    }
+    .card-icon {
+      margin-bottom: 12px;
+    }
+    .card-icon i {
+      font-size: 28px;
+      color: #e11d3f;
+    }
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+    .card-value {
+      font-size: 36px;
+      font-weight: 800;
+      margin: 6px 0;
+    }
+    .card-change {
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    
+    .dashboard-widgets-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+    .user-growth-widget, .live-clock-widget {
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .widget-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid rgba(225,29,63,0.25);
+      padding-bottom: 10px;
+    }
+    .live-clock {
+      font-size: 44px;
+      font-weight: 800;
+      font-family: monospace;
+      letter-spacing: 2px;
+    }
+    .greeting-emoji {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+    .greeting-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .charts-full-section {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+    .chart-card {
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .chart-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    canvas {
+      max-height: 260px;
+      width: 100%;
+    }
+    .orders-section {
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 20px 22px;
+      border-bottom: 2px solid rgba(225,29,63,0.3);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .status-filter {
+      padding: 8px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+    
+    /* Desktop Table View */
+    .orders-table-container {
+      overflow-x: auto;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+    .orders-table th {
+      text-align: left;
+      padding: 16px 18px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .orders-table td {
+      padding: 14px 18px;
+      font-size: 13px;
+    }
+    
+    /* Mobile Vertical Cards */
+    .orders-cards {
+      display: none;
+      gap: 16px;
+      padding: 16px;
+    }
+    .order-card {
+      background: inherit;
+      border: 2px solid rgba(225, 29, 63, 0.3);
+      border-radius: 20px;
+      padding: 18px;
+      transition: all 0.2s;
+    }
+    .order-card:hover {
+      border-color: #e11d3f;
+      transform: translateY(-2px);
+    }
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(225, 29, 63, 0.3);
+    }
+    .order-card-number {
+      font-weight: 800;
+      font-size: 16px;
+      color: #e11d3f;
+    }
+    .order-card-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .order-card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .order-card-label {
+      font-weight: 600;
+      opacity: 0.7;
+    }
+    .order-card-value {
+      font-weight: 500;
+    }
+    .order-card-items {
+      background: rgba(225, 29, 63, 0.08);
+      padding: 10px;
+      border-radius: 12px;
+      margin: 12px 0;
+      font-size: 12px;
+    }
+    .order-card-btn {
+      width: 100%;
+      padding: 10px;
+      background: rgba(225, 29, 63, 0.15);
+      border: 1.8px solid #e11d3f;
+      border-radius: 40px;
+      color: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .order-card-btn:hover {
+      background: #e11d3f;
+      color: white;
+    }
+    
+    .status-badge {
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+    .status-badge.status-paid {
+      background: rgba(16,185,129,0.15);
+      color: #10b981;
+      border: 1px solid #10b981;
+    }
+    .status-badge.status-pending {
+      background: rgba(245,158,11,0.15);
+      color: #f59e0b;
+      border: 1px solid #f59e0b;
+    }
+    .view-order-btn {
+      padding: 6px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    /* Login Page */
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    body.light-theme .login-wrapper {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .login-wrapper::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(225,29,63,0.3), transparent);
+      top: -100px;
+      right: -100px;
+      border-radius: 50%;
+    }
+    .login-wrapper::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(225,29,63,0.2), transparent);
+      bottom: -150px;
+      left: -150px;
+      border-radius: 50%;
+    }
+    .login-card {
+      background: rgba(17, 17, 24, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 48px;
+      padding: 52px 48px;
+      width: 90%;
+      max-width: 460px;
+      border: 2px solid rgba(225, 29, 63, 0.6);
+      text-align: center;
+      z-index: 10;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s;
+    }
+    body.light-theme .login-card {
+      background: rgba(255, 255, 255, 0.98);
+      border: 2px solid #e11d3f;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+    }
+    .login-logo {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, #e11d3f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 12px;
+    }
+    body.light-theme .login-logo {
+      background: linear-gradient(135deg, #e11d3f, #b91c2f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .login-subtitle {
+      color: #94a3b8;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    body.light-theme .login-subtitle {
+      color: #64748b;
+    }
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+    body.light-theme .input-label {
+      color: #475569;
+    }
+    .login-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.8px solid rgba(225, 29, 63, 0.5);
+      border-radius: 60px;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    .login-input:focus {
+      border-color: #e11d3f;
+      background: rgba(225, 29, 63, 0.1);
+    }
+    body.light-theme .login-input {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+    body.light-theme .login-input:focus {
+      border-color: #e11d3f;
+      background: #ffffff;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(95deg, #e11d3f, #ff4d6d);
+      border: none;
+      border-radius: 60px;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(225, 29, 63, 0.4);
+    }
+    .login-error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 16px;
+      font-weight: 500;
+    }
+    
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 105;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .charts-full-section { grid-template-columns: 1fr; }
+      .dashboard-widgets-row { grid-template-columns: 1fr; }
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-top-bar {
+        display: flex;
+      }
+      .admin-main {
+        margin-left: 0;
+        padding: 80px 16px 20px;
+      }
+      .admin-topbar {
+        display: none;
+      }
+      .admin-sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        z-index: 115;
+        top: 0;
+      }
+      .admin-sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+      .login-card {
+        padding: 40px 28px;
+      }
+      .page-title h1 {
+        font-size: 24px;
+      }
+      .live-clock {
+        font-size: 32px;
+      }
+      .orders-table-container {
+        display: none;
+      }
+      .orders-cards {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    
+    @media (min-width: 769px) {
+      .orders-table-container {
+        display: block;
+      }
+      .orders-cards {
+        display: none;
+      }
+    }
+
+    /* Receipt scrollbar */
+    .receipt-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+    .receipt-scroll::-webkit-scrollbar-track {
+      background: #1a1a24;
+      border-radius: 10px;
+    }
+    .receipt-scroll::-webkit-scrollbar-thumb {
+      background: #e11d3f;
+      border-radius: 10px;
+    }
+    .receipt-scroll::-webkit-scrollbar-thumb:hover {
+      background: #ff4d6d;
+    }
+    body.light-theme .receipt-scroll::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Page -->
+  <div class="login-wrapper" id="loginPage">
+    <div class="login-card">
+      <div class="login-logo">✦ AETHERIC ✦</div>
+      <p class="login-subtitle">Secure Admin Access Portal</p>
+      <div class="input-group">
+        <label class="input-label"><i class="fas fa-envelope"></i> Email Address</label>
+        <input type="email" id="adminEmail" class="login-input" placeholder="admin@aetheric.com" value="admin@aetheric.com">
+      </div>
+      <div class="input-group">
+        <label class="input-label"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="adminPassword" class="login-input" placeholder="Enter your password" value="Admin@123">
+      </div>
+      <button id="loginBtn" class="login-btn"><i class="fas fa-arrow-right-to-bracket"></i> &nbsp; Access Dashboard</button>
+      <div id="loginError" class="login-error"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard Page -->
+  <div id="dashboardPage" style="display: none;">
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+      <div class="mobile-logo">✦ AETHERIC</div>
+      <div class="mobile-actions">
+        <div class="mobile-hamburger" id="mobileHamburger">
+          <i class="fas fa-bars"></i>
+        </div>
+        <div class="mobile-profile" id="mobileProfileBtn">
+          <i class="fas fa-user-circle"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Popup -->
+    <div class="profile-popup" id="profilePopup">
+      <div class="profile-popup-item">
+        <i class="fas fa-user"></i> Admin User
+      </div>
+      <div class="profile-popup-item">
+        <i class="fas fa-envelope"></i> admin@aetheric.com
+      </div>
+      <div class="profile-popup-divider"></div>
+      <div class="profile-popup-item" id="logoutPopupBtn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="admin-container">
+      <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-logo">
+          <h2>✦ AETHERIC</h2>
+          <p>ADMIN INTELLIGENCE</p>
+        </div>
+        <nav class="sidebar-menu">
+          <div class="menu-item active" data-view="dashboard"><i class="fas fa-chart-line"></i> Dashboard</div>
+          <div class="menu-item" data-view="graphs"><i class="fas fa-chart-pie"></i> Graphs & Analytics</div>
+          <div class="menu-item" data-view="orders"><i class="fas fa-shopping-bag"></i> Orders</div>
+        </nav>
+        <div class="logout-sidebar-btn" id="logoutSidebarBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+        <div class="sidebar-footer-toggle" id="themeToggleSidebar">
+          <i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark Mode</span>
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <!-- Desktop Top Bar -->
+        <div class="admin-topbar">
+          <div class="page-title">
+            <h1 id="mainHeading">Dashboard</h1>
+            <p id="mainSub">Key metrics & intelligence</p>
+          </div>
+          <div class="profile-btn" id="desktopProfileBtn">
+            <div class="profile-info">
+              <div class="profile-name">Admin User</div>
+              <div class="profile-role">Super Admin</div>
+            </div>
+            <div class="profile-avatar">AD</div>
+          </div>
+        </div>
+
+        <div id="dashboardView">
+          <div class="analytics-grid">
+            <div class="analytics-card"><div class="card-icon"><i class="fas fa-users"></i></div><div class="card-title">Total Users</div><div class="card-value" id="totalUsers">--</div><div class="card-change positive"><i class="fas fa-arrow-up"></i> Live from DB</div></div>
+            <div class="analytics-card"><div class="card-icon"><i class="fas fa-shopping-cart"></i></div><div class="card-title">Total Orders</div><div class="card-value" id="totalOrders">--</div><div class="card-change positive"><i class="fas fa-arrow-up"></i> Live from DB</div></div>
+            <div class="analytics-card"><div class="card-icon"><i class="fas fa-dollar-sign"></i></div><div class="card-title">Total Revenue</div><div class="card-value" id="totalRevenue">$--</div><div class="card-change positive"><i class="fas fa-arrow-up"></i> Live from DB</div></div>
+            <div class="analytics-card"><div class="card-icon"><i class="fas fa-clock"></i></div><div class="card-title">Pending Payments</div><div class="card-value" id="pendingPayments">$--</div><div class="card-change negative"><i class="fas fa-arrow-down"></i> Live from DB</div></div>
+          </div>
+          <div class="dashboard-widgets-row">
+            <div class="user-growth-widget">
+              <div class="widget-header"><i class="fas fa-chart-line" style="color:#e11d3f;"></i><h4>User Growth (Last 7 Days)</h4></div>
+              <div style="height:240px;"><canvas id="userGrowthChart"></canvas></div>
+              <div style="display:flex; justify-content:space-between; margin-top:12px; font-weight:600;"><span>📊 New signups this week</span><span id="totalNewUsers" style="font-weight:800; color:#10b981;">--</span></div>
+            </div>
+            <div class="live-clock-widget" style="text-align:center;">
+              <div class="greeting-emoji" id="greetingEmoji">🌙</div>
+              <div class="greeting-text" id="greetingText">Good Evening</div>
+              <div class="live-clock" id="liveClock">--:--:--</div>
+              <div class="current-date" id="currentDate" style="font-weight:500; margin-top:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="graphsView" style="display: none;">
+          <div class="charts-full-section">
+            <div class="chart-card"><h3><i class="fas fa-chart-line"></i> Sales Trend</h3><canvas id="salesChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-pie"></i> Revenue by Category</h3><canvas id="categoryChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-trophy"></i> Top Products</h3><canvas id="topProductsChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-bar"></i> Peak Hours</h3><canvas id="peakHoursChart"></canvas></div>
+          </div>
+        </div>
+
+        <div id="ordersView" style="display: none;">
+          <div class="orders-section">
+            <div class="section-header">
+              <h3><i class="fas fa-box"></i> Order Management</h3>
+              <div class="filter-group">
+                <button class="status-filter active" data-status="all">All</button>
+                <button class="status-filter" data-status="pending">Pending</button>
+                <button class="status-filter" data-status="paid">Paid</button>
+              </div>
+            </div>
+            
+            <!-- Desktop Table View -->
+            <div class="orders-table-container">
+              <table class="orders-table">
+                <thead>
+                  <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <tr><td colspan="7" style="text-align:center;">Loading orders......</td></tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Mobile Cards View -->
+            <div class="orders-cards" id="ordersCardsContainer">
+              <div style="text-align:center; padding:20px;">Loading orders...</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+  const API_BASE = `/api`;
+    let currentFilter = 'all';
+    let charts = {};
+
+    // ==================== SIDEBAR & MENU ====================
+    const mobileHamburger = document.getElementById('mobileHamburger');
+    const sidebar = document.getElementById('adminSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const mobileProfileBtn = document.getElementById('mobileProfileBtn');
+    const desktopProfileBtn = document.getElementById('desktopProfileBtn');
+    const profilePopup = document.getElementById('profilePopup');
+    const logoutPopupBtn = document.getElementById('logoutPopupBtn');
+    
+    function closeSidebar() {
+      sidebar?.classList.remove('open');
+      overlay?.classList.remove('show');
+    }
+    
+    function openSidebar() {
+      sidebar?.classList.add('open');
+      overlay?.classList.add('show');
+    }
+    
+    mobileHamburger?.addEventListener('click', openSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+    
+    // Profile popup toggle
+    function toggleProfilePopup(e) {
+      e.stopPropagation();
+      profilePopup?.classList.toggle('show');
+    }
+    
+    mobileProfileBtn?.addEventListener('click', toggleProfilePopup);
+    desktopProfileBtn?.addEventListener('click', toggleProfilePopup);
+    
+    // Close popup when clicking outside
+    document.addEventListener('click', (e) => {
+      if (profilePopup && !mobileProfileBtn?.contains(e.target) && !desktopProfileBtn?.contains(e.target) && !profilePopup.contains(e.target)) {
+        profilePopup.classList.remove('show');
+      }
+    });
+    
+    logoutPopupBtn?.addEventListener('click', () => location.reload());
+
+    // ==================== API FUNCTIONS ====================
+    async function fetchDashboardStats() {
+        try {
+            const response = await fetch(`${API_BASE}/admin/dashboard/stats`);
+            const data = await response.json();
+            document.getElementById('totalUsers').innerText = data.totalUsers.toLocaleString();
+            document.getElementById('totalOrders').innerText = data.totalOrders.toLocaleString();
+            document.getElementById('totalRevenue').innerText = `$${data.totalRevenue.toLocaleString()}`;
+            document.getElementById('pendingPayments').innerText = `$${data.pendingPayments.toLocaleString()}`;
+            document.getElementById('totalNewUsers').innerHTML = `+${data.totalNewUsers} new users`;
+            return data;
+        } catch (error) {
+            console.error('Error fetching dashboard stats:', error);
+            return null;
+        }
+    }
+
+    async function fetchOrders(status = 'all') {
+        try {
+            const response = await fetch(`${API_BASE}/admin/orders?status=${status}`);
+            const orders = await response.json();
+            renderOrdersTable(orders);
+            renderOrdersCards(orders);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            document.getElementById('ordersTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Error loading orders</td></tr>';
+            document.getElementById('ordersCardsContainer').innerHTML = '<div style="text-align:center; padding:20px;">Error loading orders</div>';
+        }
+    }
+    
+    function renderOrdersCards(orders) {
+        const container = document.getElementById('ordersCardsContainer');
+        if (!orders || orders.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px;">No orders found</div>';
+            return;
+        }
+        
+        container.innerHTML = orders.map(order => {
+            const items = order.order_items?.map(i => `${i.product_name} (${i.quantity})`).join(', ') || '-';
+            const date = new Date(order.created_at).toLocaleDateString();
+            const statusClass = order.payment_status === 'paid' ? 'status-paid' : 'status-pending';
+            const isLight = document.body.classList.contains('light-theme');
+            
+            return `
+                <div class="order-card" style="background: ${isLight ? '#ffffff' : '#111118'};">
+                    <div class="order-card-header">
+                        <span class="order-card-number">${order.order_number}</span>
+                        <span class="order-card-status ${statusClass}">${order.payment_status?.toUpperCase() || 'PENDING'}</span>
+                    </div>
+                    <div class="order-card-row">
+                        <span class="order-card-label">Customer:</span>
+                        <span class="order-card-value">${order.customer_name}</span>
+                    </div>
+                    <div class="order-card-row">
+                        <span class="order-card-label">Date:</span>
+                        <span class="order-card-value">${date}</span>
+                    </div>
+                    <div class="order-card-row">
+                        <span class="order-card-label">Total:</span>
+                        <span class="order-card-value" style="color: #e11d3f; font-weight:800;">$${order.total_amount?.toFixed(2) || '0.00'}</span>
+                    </div>
+                    <div class="order-card-items">
+                        <strong>Items:</strong> ${items}
+                    </div>
+                    <button class="order-card-btn" data-id="${order.order_number}">
+                        📄 View Receipt
+                    </button>
+                </div>
+            `;
+        }).join('');
+        
+        document.querySelectorAll('.order-card-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const orderId = btn.getAttribute('data-id');
+                await showOrderReceipt(orderId);
+            });
+        });
+    }
+
+    function renderOrdersTable(orders) {
+        const tbody = document.getElementById('ordersTableBody');
+        if (!orders || orders.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No orders found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = orders.map(order => {
+            const items = order.order_items?.map(i => `${i.product_name}(${i.quantity})`).join(', ') || '-';
+            const date = new Date(order.created_at).toLocaleDateString();
+            const statusClass = order.payment_status === 'paid' ? 'status-paid' : 'status-pending';
+            
+            return `
+                <tr>
+                    <td><strong>${order.order_number}</strong></td>
+                    <td>${order.customer_name}</td>
+                    <td>${items.substring(0, 50)}</td>
+                    <td>$${order.total_amount?.toFixed(2) || '0.00'}</td>
+                    <td>${date}</td>
+                    <td><span class="status-badge ${statusClass}">${order.payment_status?.toUpperCase() || 'PENDING'}</span></td>
+                    <td><button class="view-order-btn" data-id="${order.order_number}">📄 Receipt</button></td>
+                </tr>
+            `;
+        }).join('');
+        
+        document.querySelectorAll('.view-order-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const orderId = btn.getAttribute('data-id');
+                await showOrderReceipt(orderId);
+            });
+        });
+    }
+
+    async function showOrderReceipt(orderId) {
+        try {
+            const response = await fetch(`${API_BASE}/admin/orders/${orderId}`);
+            const order = await response.json();
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            const receiptId = `receipt_${Date.now()}`;
+            const isLight = document.body.classList.contains('light-theme');
+            
+            const receipt = `
+                <div id="${receiptId}" class="receipt-scroll" style="
+                    background: ${isLight ? '#ffffff' : '#1a1a24'};
+                    border-radius: 24px;
+                    max-width: 500px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    padding: 30px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    border: 2px solid #e11d3f;
+                ">
+                    <div style="text-align: center; border-bottom: 2px solid #e11d3f; padding-bottom: 20px; margin-bottom: 20px;">
+                        <h2 style="font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #e11d3f, #ff4d6d); -webkit-background-clip: text; background-clip: text; color: transparent;">✦ AETHERIC ✦</h2>
+                        <p style="color: #94a3b8; margin-top: 5px;">Order Receipt</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Order Number:</strong> ${order.order_number}</p>
+                        <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+                        <p><strong>Status:</strong> <span style="color: #10b981;">${order.payment_status?.toUpperCase()}</span></p>
+                    </div>
+                    
+                    <div style="background: ${isLight ? '#f1f5f9' : '#0f0f17'}; padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">Customer Details</h3>
+                        <p><strong>Name:</strong> ${order.customer_name}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">Order Items</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #e11d3f;">
+                                    <th style="text-align: left; padding: 8px;">Product</th>
+                                    <th style="text-align: center; padding: 8px;">Qty</th>
+                                    <th style="text-align: right; padding: 8px;">Price</th>
+                                    <th style="text-align: right; padding: 8px;">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.order_items?.map(item => `
+                                    <tr style="border-bottom: 1px solid ${isLight ? '#e2e8f0' : '#334155'};">
+                                        <td style="padding: 8px;">${item.product_name}</td>
+                                        <td style="text-align: center; padding: 8px;">${item.quantity}</td>
+                                        <td style="text-align: right; padding: 8px;">$${item.product_price?.toFixed(2)}</td>
+                                        <td style="text-align: right; padding: 8px;">$${item.subtotal?.toFixed(2)}</td>
+                                    </tr>
+                                `).join('') || '<tr><td colspan="4" style="padding: 8px; text-align: center;">No items</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="border-top: 2px solid #e11d3f; padding-top: 15px; margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Subtotal:</strong>
+                            <span>$${order.total_amount?.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Shipping:</strong>
+                            <span>$0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; margin-top: 10px; padding-top: 10px; border-top: 1px solid ${isLight ? '#e2e8f0' : '#334155'};">
+                            <strong>TOTAL:</strong>
+                            <strong style="color: #e11d3f;">$${order.total_amount?.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid ${isLight ? '#e2e8f0' : '#334155'};">
+                        <p style="font-size: 12px; color: #94a3b8;">Thank you for shopping with AETHERIC!</p>
+                        <p style="font-size: 12px; color: #94a3b8;">For any queries, contact support@aetheric.com</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="flex: 1; padding: 12px; background: #e11d3f; border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer;">Close</button>
+                        <button onclick="downloadReceipt('${receiptId}', '${order.order_number}')" style="flex: 1; padding: 12px; background: ${isLight ? '#f1f5f9' : '#0f0f17'}; border: 2px solid #e11d3f; border-radius: 12px; color: #e11d3f; font-weight: 700; cursor: pointer;">📥 Download</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.innerHTML = receipt;
+            document.body.appendChild(modal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+            
+        } catch (error) {
+            console.error('Error fetching order details:', error);
+            alert('Error loading receipt');
+        }
+    }
+
+    function downloadReceipt(receiptId, orderNumber) {
+        const receiptElement = document.getElementById(receiptId);
+        const receiptHtml = receiptElement.cloneNode(true);
+        const buttons = receiptHtml.querySelectorAll('button');
+        buttons.forEach(btn => btn.remove());
+        
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Receipt_${orderNumber}</title>
+                <meta charset="UTF-8">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { font-family: 'Inter', Arial, sans-serif; padding: 40px 20px; background: #ffffff; color: #0f172a; }
+                    .receipt-container { max-width: 500px; margin: 0 auto; background: #ffffff; border-radius: 24px; padding: 30px; border: 2px solid #e11d3f; }
+                    h2 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #e11d3f, #ff4d6d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th { text-align: left; padding: 8px; border-bottom: 2px solid #e11d3f; }
+                    td { padding: 8px; border-bottom: 1px solid #e2e8f0; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                <div class="receipt-container">
+                    ${receiptHtml.innerHTML}
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        setTimeout(() => window.close(), 500);
+                    }
+                <\/script>
+            </body>
+            </html>
+        `;
+        
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Receipt_${orderNumber}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // ==================== CHARTS ====================
+    async function renderUserGrowthChart() {
+        const stats = await fetchDashboardStats();
+        const ctx = document.getElementById('userGrowthChart')?.getContext('2d');
+        if (!ctx) return;
+        if (charts.userGrowth) charts.userGrowth.destroy();
+        
+        charts.userGrowth = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'New Users',
+                    data: stats?.userGrowth || [0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#e11d3f',
+                    backgroundColor: 'rgba(225, 29, 63, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: '#f1f5f9', font: { weight: 'bold' } } }
+                },
+                scales: {
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    async function renderSalesChart() {
+        try {
+            const response = await fetch(`${API_BASE}/admin/analytics/sales-trend`);
+            const { labels, data } = await response.json();
+            const ctx = document.getElementById('salesChart')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.sales) charts.sales.destroy();
+            
+            charts.sales = new Chart(ctx, {
+                type: 'line',
+                data: { labels, datasets: [{ label: 'Sales ($)', data, borderColor: '#e11d3f', backgroundColor: 'rgba(225,29,63,0.1)', borderWidth: 3, fill: true, tension: 0.3 }] },
+                options: { responsive: true }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function renderCategoryChart() {
+        try {
+            const response = await fetch(`${API_BASE}/admin/analytics/category-revenue`);
+            const { labels, data } = await response.json();
+            const ctx = document.getElementById('categoryChart')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.category) charts.category.destroy();
+            
+            charts.category = new Chart(ctx, {
+                type: 'pie',
+                data: { labels, datasets: [{ data, backgroundColor: ['#e11d3f', '#f97316', '#eab308', '#10b981', '#8b5cf6'] }] },
+                options: { responsive: true }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function renderTopProductsChart() {
+        try {
+            const response = await fetch(`${API_BASE}/admin/analytics/top-products`);
+            const { labels, data } = await response.json();
+            const ctx = document.getElementById('topProductsChart')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.top) charts.top.destroy();
+            
+            charts.top = new Chart(ctx, {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'Units Sold', data, backgroundColor: '#e11d3f', borderRadius: 8 }] },
+                options: { responsive: true }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function renderPeakHoursChart() {
+        try {
+            const response = await fetch(`${API_BASE}/admin/analytics/peak-hours`);
+            const { labels, data } = await response.json();
+            const ctx = document.getElementById('peakHoursChart')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.peak) charts.peak.destroy();
+            
+            charts.peak = new Chart(ctx, {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'Orders', data, backgroundColor: '#e11d3f', borderRadius: 8 }] },
+                options: { responsive: true }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function renderAllGraphsCharts() {
+        await renderSalesChart();
+        await renderCategoryChart();
+        await renderTopProductsChart();
+        await renderPeakHoursChart();
+    }
+
+    function updateLiveClock() {
+        const now = new Date();
+        document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
+        document.getElementById('currentDate').innerText = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const hours = now.getHours();
+        let greeting = '', emoji = '';
+        if (hours < 12) { greeting = 'Good Morning'; emoji = '🌅'; }
+        else if (hours < 18) { greeting = 'Good Afternoon'; emoji = '☀️'; }
+        else { greeting = 'Good Evening'; emoji = '🌙'; }
+        document.getElementById('greetingText').innerHTML = `${greeting}, Admin`;
+        document.getElementById('greetingEmoji').innerHTML = emoji;
+    }
+
+    // ==================== VIEW SWITCHER ====================
+    function switchView(view) {
+        document.getElementById('dashboardView').style.display = view === 'dashboard' ? 'block' : 'none';
+        document.getElementById('graphsView').style.display = view === 'graphs' ? 'block' : 'none';
+        document.getElementById('ordersView').style.display = view === 'orders' ? 'block' : 'none';
+        
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        document.querySelector(`.menu-item[data-view="${view}"]`).classList.add('active');
+        
+        const titles = {
+            dashboard: { h1: 'Dashboard', p: 'Key metrics & intelligence' },
+            graphs: { h1: 'Graphs & Analytics', p: 'Visual insights & performance trends' },
+            orders: { h1: 'Order Management', p: 'Track, filter & manage transactions' }
+        };
+        
+        document.getElementById('mainHeading').innerText = titles[view].h1;
+        document.getElementById('mainSub').innerText = titles[view].p;
+        
+        if (view === 'dashboard') {
+            fetchDashboardStats();
+            renderUserGrowthChart();
+        } else if (view === 'graphs') {
+            renderAllGraphsCharts();
+        } else if (view === 'orders') {
+            fetchOrders(currentFilter);
+        }
+        
+        closeSidebar();
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+        
+        try {
+            const response = await fetch(`${API_BASE}/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+                await fetchDashboardStats();
+                await renderUserGrowthChart();
+                switchView('dashboard');
+                setInterval(updateLiveClock, 1000);
+                updateLiveClock();
+            } else {
+                document.getElementById('loginError').innerText = '❌ Invalid credentials';
+            }
+        } catch (error) {
+            document.getElementById('loginError').innerText = '❌ Server error. Please try again.';
+        }
+    });
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', (e) => switchView(e.currentTarget.dataset.view));
+    });
+
+    document.querySelectorAll('.status-filter').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.status-filter').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.status;
+            fetchOrders(currentFilter);
+        });
+    });
+
+    document.getElementById('logoutSidebarBtn').addEventListener('click', () => {
+        location.reload();
+    });
+
+    document.getElementById('themeToggleSidebar').addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        document.getElementById('themeIcon').className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+        document.getElementById('themeLabel').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+        renderUserGrowthChart();
+        if (document.getElementById('graphsView').style.display === 'block') {
+            renderAllGraphsCharts();
+        }
+    });
+  </script>
+</body>
+</html>
